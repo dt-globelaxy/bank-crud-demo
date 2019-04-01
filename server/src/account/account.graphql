@@ -1,0 +1,100 @@
+scalar BigInt
+scalar Date
+enum AccountType {
+    Savings
+    Checking
+}
+
+enum OrderType {
+    asc
+    desc
+}
+
+scalar Date
+
+input AccountPagedInput {
+    page: Int
+    perPage: Int
+    order: OrderType
+    orderBy: String
+    fromNumber: Int
+    toNumber: Int
+}
+
+type PagedAccounts {
+    data: [Account]
+    count: Int
+    page: Int
+    perPage: Int
+}
+
+type Query {
+    getAccounts(pagedInput: AccountPagedInput): PagedAccounts
+    account(id: ID!): Account
+}
+
+type Mutation {
+    createAccount(createAccountInput: CreateAccountInput): Account
+    updateAccount(updateAccountInput: UpdateAccountInput): Account
+    deleteAccount(id: ID!): Account
+}
+
+type Subscription {
+    accountCreated: Account
+    accountUpdated: Account
+    accountDeleted: Account
+}
+
+type Bank {
+    id: Int
+    name: String
+    notes: String
+    created: Date
+    updated: Date
+}
+
+type Branch {
+    id: Int
+    bankId: Int
+    name: String
+    bank: Bank
+    address: String
+    created: Date
+    updated: Date
+}
+
+type Account {
+    id: Int
+    holdersName: String
+    employeeName: String
+    bankId: Int
+    bank: Bank
+    branchId: Int
+    branch: Branch
+    type: AccountType
+    number: Int
+    employeeNumber: BigInt
+    created: Date
+    updated: Date
+}
+
+input CreateAccountInput {
+    holdersName: String
+    employeeName: String
+    bankId: Int
+    branchId: Int
+    type: AccountType
+    number: Int
+    employeeNumber: BigInt
+}
+
+input UpdateAccountInput {
+    id: Int
+    holdersName: String
+    employeeName: String
+    bankId: Int
+    branchId: Int
+    type: AccountType
+    number: Int
+    employeeNumber: BigInt
+}

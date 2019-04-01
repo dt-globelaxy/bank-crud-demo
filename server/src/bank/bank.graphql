@@ -1,0 +1,37 @@
+scalar Date
+
+type Query {
+    getBanks: [Bank]
+    bank(id: ID!): Bank
+}
+
+type Mutation {
+    createBank(createBankInput: CreateBankInput): Bank
+    updateBank(updateBankInput: UpdateBankInput): Bank
+    deleteBank(id: ID!): Bank
+}
+
+type Subscription {
+    bankCreated: Bank
+    bankUpdated: Bank
+    bankDeleted: Bank
+}
+
+type Bank {
+    id: Int
+    name: String
+    notes: String
+    created: Date
+    updated: Date
+}
+
+input CreateBankInput {
+    name: String
+    notes: String
+}
+
+input UpdateBankInput {
+    id: Int
+    name: String
+    notes: String
+}

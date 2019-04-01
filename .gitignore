@@ -1,0 +1,6 @@
+.vscode
+server/node_modules
+client/node_modules
+*/dist
+*/coverage
+server/production.env

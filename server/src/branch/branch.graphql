@@ -1,0 +1,55 @@
+scalar Date
+
+enum OrderType {
+    asc
+    desc
+}
+
+type Query {
+    getBranches: [Branch]
+    getBankBranches(bankId: ID!): [Branch]
+    branch(id: ID!): Branch
+}
+
+type Mutation {
+    createBranch(createBranchInput: CreateBranchInput): Branch
+    updateBranch(updateBranchInput: UpdateBranchInput): Branch
+    deleteBranch(id: ID!): Branch
+}
+
+type Subscription {
+    branchCreated: Branch
+    branchUpdated: Branch
+    branchDeleted: Branch
+}
+
+type Bank {
+    id: Int
+    name: String
+    notes: String
+    created: Date
+    updated: Date
+}
+
+type Branch {
+    id: Int
+    bankId: Int
+    name: String
+    bank: Bank
+    address: String
+    created: Date
+    updated: Date
+}
+
+input CreateBranchInput {
+    bankId: Int
+    name: String
+    address: String
+}
+
+input UpdateBranchInput {
+    id: Int
+    bankId: Int
+    name: String
+    address: String
+}
