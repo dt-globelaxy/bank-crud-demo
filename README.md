@@ -6,6 +6,6 @@
 # Frontend development
 7 hours 30 minutes
 
-# Devo ops
+# DevOps
 
 
