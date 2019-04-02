@@ -6,6 +6,8 @@ import {Branch} from '../graphql.schema';
 import {CreateBranchDto} from './dto/create-branch.dto';
 import {BranchService} from './branch.service';
 import {UpdateBranchDto} from './dto/update-branch.dto';
+import { UserInputError } from 'apollo-server-core';
+import { validateDto } from 'src/common/utils';
 
 const pubSub = new PubSub();
 
@@ -35,21 +37,31 @@ export class BranchResolvers {
     }
 
     @Mutation('createBranch')
-    async create(@Args('createBranchInput')args: CreateBranchDto): Promise < Branch > {
-        const entity = await this
-            .branchService
-            .create(args);
-        pubSub.publish('branchCreated', {branchCreated: entity});
-        return entity;
+    async create(@Args('createBranchInput')args: CreateBranchDto): Promise<Branch> {
+        const createBranchDto = await validateDto(CreateBranchDto, args);
+        try {
+            const entity = await this
+                .branchService
+                .create(createBranchDto);
+            pubSub.publish('branchCreated', {branchCreated: entity});
+            return entity;
+        } catch (error) {
+            throw new UserInputError('Branch record with such name already exists', { fields: {name: 'Already exists' } });
+        }
     }
 
     @Mutation('updateBranch')
     async update(@Args('updateBranchInput')args: UpdateBranchDto): Promise < Branch > {
-        const entity = await this
-            .branchService
-            .update(args);
-        pubSub.publish('branchUpdated', {branchUpdated: entity});
-        return entity;
+        const updateBranchDto = await validateDto(UpdateBranchDto, args);
+        try {
+            const entity = await this
+                .branchService
+                .update(updateBranchDto);
+            pubSub.publish('branchUpdated', {branchUpdated: entity});
+            return entity;
+        } catch (error) {
+            throw new UserInputError('Branch record with such name already exists', { fields: {name: 'Already exists' } });
+        }
     }
 
     @Mutation('deleteBranch')

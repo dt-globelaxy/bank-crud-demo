@@ -14,11 +14,9 @@ interface IFormWrapperProps {
 
 const FormWrapper: React.SFC<IFormWrapperProps> = ({initialValues, mutation }) => ( 
     <Form 
-        onSubmit={(values) =>  {
-            console.log('=============> values', values);
-            return mutation({ variables: values }).catch(({ graphQLErrors }) => {
-            return graphQLErrors.length && graphQLErrors[0].extensions.exception.fields;
-        })}}
+        onSubmit={(values) => mutation({ variables: values }).catch(({ graphQLErrors }) => {
+            return graphQLErrors && graphQLErrors.length && graphQLErrors[0].extensions.exception.fields;
+        })}
         initialValues={initialValues}
         validate={branchFormValidation}
         render={branchFormRender} 

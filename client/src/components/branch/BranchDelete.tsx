@@ -22,7 +22,7 @@ class BranchDelete extends React.Component<IBranchListProps> {
     
     render() {
         return (
-            <Mutation mutation={DELETE_BRANCH} refetchQueries={['getBranches']}>
+            <Mutation mutation={DELETE_BRANCH} refetchQueries={['getBranches', 'branch', 'getAccounts', 'account']}>
                 {(deleteBranch) => (
                 <ConfirmDialog open={this.props.openDialog} message={`Do you really want to delete ${this.props.item && this.props.item.name}?`} 
                     handleDialogAction={this.handleDelete(deleteBranch)}

@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, UpdateDateColumn, CreateDateColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn, JoinColumn, ManyToOne } from 'typeorm';
 import { Branch } from '../branch/branch.entity';
 import { Bank } from '../bank/bank.entity';
 
@@ -18,17 +18,17 @@ export class Account {
   @Column({ length: 255 })
   employeeName: string;
 
-  @Column()
+  @Column({unique: false})
   bankId: number;
 
-  @OneToOne(type => Bank)
+  @ManyToOne(type => Bank, {onDelete: 'CASCADE'})
   @JoinColumn({name: 'bankId'})
   bank: Bank;
 
-  @Column()
+  @Column({unique: false})
   branchId: number;
 
-  @OneToOne(type => Branch)
+  @ManyToOne(type => Branch, {onDelete: 'CASCADE'})
   @JoinColumn({name: 'branchId'})
   branch: Branch;
 

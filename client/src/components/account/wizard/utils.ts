@@ -11,8 +11,8 @@ export function normalizeAccountNumber(value: string) {
 export function normalizeEmployeeNumber(value: string) {
     if (!value) return value;
     const onlyNums = value.replace(/[^\d]/g, "");
-    if (!onlyNums) return 0;
-    if (onlyNums.length <= 15) return undefined;
+    if (!onlyNums) return undefined;
+    if (onlyNums.length <= 15) return onlyNums;
     return onlyNums.slice(0, 15)
 }
 

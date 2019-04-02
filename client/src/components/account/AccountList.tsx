@@ -61,20 +61,14 @@ class AccountsList extends React.Component<any, IState> {
   }
   render() {
       const {page, perPage, order, orderBy, fromNumber, toNumber } = this.state;
-      console.log('state', this.state);
       return(<>
           <AccountDelete openDialog={this.state.openDialog} item={this.state.item} closeDialog={this.handleDialogClose} />
           <Button onClick={this.handleCreateRedirect}>Create</Button>
           <AccountListFilters fromNumber={fromNumber} toNumber={toNumber} onFilterChange={this.handleFilderChange} />
           <Query query={GET_ACCOUNTS} variables={{page, perPage, order, orderBy, fromNumber, toNumber }}>
             {({ data, error, loading }) => {
-              if (error) {
-                return <Error error={error} />
-              }
-
-              if (loading || !data) {
-                return <Spinner />
-              }
+              if (error) {return <Error error={error} /> }
+              if (loading || !data) { return <Spinner /> }
 
               return (
                 <EnhancedTable  title="Accounts"  keyField="id" order={order} orderBy={orderBy} 

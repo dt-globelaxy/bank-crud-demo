@@ -22,7 +22,7 @@ class BankDelete extends React.Component<IBankListProps> {
     
     render() {
         return (
-            <Mutation mutation={DELETE_BANK} refetchQueries={['getBanks']}>
+            <Mutation mutation={DELETE_BANK} refetchQueries={['getBanks','bank', 'getBranches', 'branch', 'getAccounts', 'account']}>
                 {(deleteBank) => (
                 <ConfirmDialog open={this.props.openDialog} message={`Do you really want to delete ${this.props.item && this.props.item.name}?`} 
                     handleDialogAction={this.handleDelete(deleteBank)}

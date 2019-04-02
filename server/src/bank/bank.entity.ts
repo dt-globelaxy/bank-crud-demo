@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, UpdateDateColumn, CreateDateColumn } from 'typeorm';
 import { Branch } from '../branch/branch.entity';
+import { Account } from 'src/account/account.entity';
 
 @Entity()
 export class Bank {
@@ -14,6 +15,9 @@ export class Bank {
 
   @OneToMany(type => Branch, branch => branch.bank)
   branches: Branch[];
+
+  @OneToMany(type => Account, account => account.bank)
+  accounts: Account[];
 
   @CreateDateColumn({readonly: true})
   created: Date;

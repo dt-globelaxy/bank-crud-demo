@@ -7,9 +7,7 @@ import {CreateBankDto} from './dto/create-bank.dto';
 import {BankService} from './bank.service';
 import {UpdateBankDto} from './dto/update-bank.dto';
 import { UserInputError } from 'apollo-server-core';
-import { validate } from 'class-validator';
-import { plainToClass } from 'class-transformer';
-import { convertValidationErrorsToFields } from '../common/utils';
+import { validateDto } from '../common/utils';
 
 const pubSub = new PubSub();
 
@@ -33,12 +31,7 @@ export class BankResolvers {
 
     @Mutation('createBank')
     async create(@Args('createBankInput')args: CreateBankDto): Promise<Bank | { message: string, code: any, locations: string, path: string}> {
-        const createBankDto = plainToClass(CreateBankDto, args);
-        const validationErrors = await validate(createBankDto);
-        if (validationErrors.length > 0) {
-            const fields = convertValidationErrorsToFields(validationErrors);
-            throw new UserInputError('Bank validation errors', {fields });
-        }
+        const createBankDto = await validateDto(CreateBankDto, args);
         try {
             const entity = await this
                 .bankService
@@ -52,16 +45,11 @@ export class BankResolvers {
 
     @Mutation('updateBank')
     async update(@Args('updateBankInput')args: UpdateBankDto): Promise < Bank > {
-        const createBankDto = plainToClass(CreateBankDto, args);
-        const validationErrors = await validate(createBankDto);
-        if (validationErrors.length > 0) {
-            const fields = convertValidationErrorsToFields(validationErrors);
-            throw new UserInputError('Bank validation errors', {fields });
-        }
+        const updateBankDto = await validateDto(UpdateBankDto, args);
         try {
             const entity = await this
                 .bankService
-                .update(args);
+                .update(updateBankDto);
             pubSub.publish('bankUpdated', {bankUpdated: entity});
             return entity;
         } catch (error) {
