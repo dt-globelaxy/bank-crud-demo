@@ -73,7 +73,7 @@ class AccountsList extends React.Component<any, IState> {
               return (
                 <EnhancedTable  title="Accounts"  keyField="id" order={order} orderBy={orderBy} 
                     columns={accountListColumns(this.handleOnEditItemClick, this.confirmDelete)}
-                    isLoading={loading} data={data.getAccounts.data} count={data.count}
+                    isLoading={loading} data={data.getAccounts.data} count={data.getAccounts.count}
                     perPage={perPage}
                     page={page}
                     remotePaging={true}
