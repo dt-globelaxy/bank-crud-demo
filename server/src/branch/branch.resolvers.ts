@@ -7,7 +7,7 @@ import {CreateBranchDto} from './dto/create-branch.dto';
 import {BranchService} from './branch.service';
 import {UpdateBranchDto} from './dto/update-branch.dto';
 import { UserInputError } from 'apollo-server-core';
-import { validateDto } from 'src/common/utils';
+import { validateDto } from '../common/utils';
 
 const pubSub = new PubSub();
 

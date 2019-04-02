@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn, ManyToOne, JoinColumn, Index, OneToMany } from 'typeorm';
 import { Bank } from '../bank/bank.entity';
-import { Account } from 'src/account/account.entity';
+import { Account } from '../account/account.entity';
 
 @Entity()
 @Index('unique_index_with_bankId_and_name', (branch: Branch) => [branch.bankId, branch.name], { unique: true })

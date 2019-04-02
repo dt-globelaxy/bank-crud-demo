@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, UpdateDateColumn, CreateDateColumn } from 'typeorm';
 import { Branch } from '../branch/branch.entity';
-import { Account } from 'src/account/account.entity';
+import { Account } from '../account/account.entity';
 
 @Entity()
 export class Bank {
