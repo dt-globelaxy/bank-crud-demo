@@ -51,8 +51,10 @@ export default class Wizard extends React.Component<IWizardFormProps, IWizardFor
         const isLastPage = page === lastPageIndex
         if (isLastPage) {
           values.number = parseInt(values.number);
-          return  this.props.mutation({ variables: values }).catch(({ graphQLErrors }) => {
-            return graphQLErrors && graphQLErrors.length && graphQLErrors[0].extensions.exception.fields;
+          console.log('===========================>', values);
+          return  this.props.mutation({ variables: values }).catch((error) => {
+            throw error
+            return error.graphQLErrors && error.graphQLErrors.length && error.graphQLErrors[0].extensions.exception.fields;
           }); 
         } else {
           this.next(values)

@@ -10,7 +10,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { formatCellDateTime } from '../../utils';
 import Button from '@material-ui/core/Button';
 import { IBranch } from './models';
-import { RouteComponentProps } from 'react-router-dom';
 import { RoutePaths } from '../layout/constants';
 import BranchDelete from './BranchDelete';
 
@@ -19,7 +18,7 @@ interface IBankListState {
   item: IBranch | undefined
 }
 
-class BranchList extends React.Component<RouteComponentProps, IBankListState> {
+class BranchList extends React.Component<any,IBankListState> {
   state: IBankListState = {
       openDialog: false,
       item: undefined
@@ -34,13 +33,8 @@ class BranchList extends React.Component<RouteComponentProps, IBankListState> {
         <Button onClick={this.handleCreateRedirect} >Create</Button>
         <Query query={GET_BRANCHES}>
           {({ data, error, loading }) => {
-            if (error) {
-              return <Error error={error} />
-            }
-
-            if (loading || !data) {
-              return <Spinner />
-            }
+            if (error) { return <Error error={error} />  }
+            if (loading || !data) {  return <Spinner /> }
 
             return (
               <EnhancedTable 

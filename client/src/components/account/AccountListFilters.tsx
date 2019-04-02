@@ -4,7 +4,6 @@ import Grid from '@material-ui/core/Grid/Grid';
 import { Field, Form } from 'react-final-form';
 import { normalizeAccountNumber } from './wizard/utils';
 import { TextField } from 'final-form-material-ui';
-import { padStart } from 'lodash';
 import Button from '@material-ui/core/Button/Button';
 
 interface IAccountListFiltersProps {

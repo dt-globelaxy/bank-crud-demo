@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Error from './Error';
 import { ApolloError } from 'apollo-client';
 import { shallow} from 'enzyme';
