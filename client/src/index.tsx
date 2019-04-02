@@ -11,7 +11,7 @@ import App from './components/App'
 
 const client = new ApolloClient({
     cache: new InMemoryCache(),
-    link: new HttpLink({uri: process.env.API_URL || 'http://localhost:3003/graphql' })
+    link: new HttpLink({uri: process.env.REACT_APP_API_URL })
 })
 
 const hookEl = document.getElementById('root')as HTMLElement
