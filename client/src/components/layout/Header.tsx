@@ -16,7 +16,7 @@ const styles = (theme : Theme) => createStyles({
 
 interface IHeaderProps extends WithStyles < typeof styles > {}
 
-const Header: React.SFC<IHeaderProps> = ({classes}) => (
+const Header: React.FC<IHeaderProps> = ({classes}) => (
     <AppBar className={classes.appBar}>
         <Toolbar>
             <Typography variant="h5" color="inherit" noWrap={true}>

@@ -3,15 +3,14 @@ import wait from 'waait';
 import { mount } from 'enzyme';
 import { RoutePaths } from '../layout/constants';
 import { customWrapper } from '../../helpers/customWrapper';
-import { MemoryRouter, Router } from 'react-router-dom';
 import { createBankMock } from '../../helpers/mocks/bank/mutations/createBank';
 import BankCreateForm from './BankCreateForm';
 import Button from '@material-ui/core/Button/Button';
 import { getBanksMock } from '../../helpers/mocks/bank/queries/getBanks';
 
-describe('BankCreateForm component', async () => {
+describe('BankCreateForm component', () => {
 
-    it('renders form', async () => {
+    it('renders form', async (done) => {
         const wrapper = mount(
             customWrapper(<BankCreateForm />,
                 [...createBankMock, ...getBanksMock ], 
@@ -30,7 +29,7 @@ describe('BankCreateForm component', async () => {
         wrapper.find('form').simulate('submit');
         await wait(1); // wait for response
         wrapper.update();
-
+        done()
         //expect(wrapper.find(Router).props().history.location.pathname).toBe(RoutePaths.Banks);
     });
 

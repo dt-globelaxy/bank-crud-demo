@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider } from 'react-apollo/test-utils';
+import { MockedProvider } from "@apollo/react-testing";
 import App from './App';
 import { shallow, mount } from 'enzyme';
 import Drawer from './layout/Drawer';

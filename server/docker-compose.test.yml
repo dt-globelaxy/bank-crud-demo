@@ -1,0 +1,20 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: 'test-bank-crud-demo-db'
+      MYSQL_USER: 'test-bank-crud-demo-account'
+      MYSQL_PASSWORD: 'test-bank-crud-demo-password'
+      MYSQL_ROOT_PASSWORD: 'test-bank-crud-demo-password'
+    ports:
+      - 3306:7777
+    tmpfs: /var/lib/mysql
+  app-test:
+    build: .
+    image: app
+    environment:
+      - NODE_ENV=test
+    command: npm run test
+    depends_on:
+      - mysql

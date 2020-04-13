@@ -1,6 +1,6 @@
 import Spinner from "@material-ui/core/CircularProgress";
 import * as React from "react";
-import { Query, QueryResult } from "react-apollo";
+import { useQuery } from "react-apollo";
 import Error from "../Error";
 import { GET_BRANCHES } from "./queries/getBranches";
 import EnhancedTable from "../table/EnhancedTable";
@@ -12,92 +12,83 @@ import Button from "@material-ui/core/Button";
 import { IBranch } from "./models";
 import { RoutePaths } from "../layout/constants";
 import BranchDelete from "./BranchDelete";
+import { useHistory } from "react-router-dom";
 
-interface IBankListState {
-  openDialog: boolean;
-  item: IBranch | undefined;
+interface QueryResponse {
+  getBranches: IBranch[];
 }
 
-class BranchList extends React.Component<any, IBankListState> {
-  state: IBankListState = {
-    openDialog: false,
-    item: undefined,
-  };
-  handleDialogClose = () => this.setState({ openDialog: false });
-  confirmDelete = (item: IBranch) => this.setState({ item, openDialog: true });
-  handleCreateRedirect = () => {
-    this.props.history.push(RoutePaths.BranchCreate);
-  };
-  render() {
-    return (
-      <>
-        <BranchDelete
-          openDialog={this.state.openDialog}
-          item={this.state.item}
-          closeDialog={this.handleDialogClose}
-        />
-        <Button onClick={this.handleCreateRedirect}>Create</Button>
-        <Query query={GET_BRANCHES}>
-          {({ data, error, loading }: QueryResult<any>) => {
-            if (error) {
-              return <Error error={error} />;
-            }
-            if (loading || !data) {
-              return <Spinner />;
-            }
+const BranchList: React.FC = () => {
+  const history = useHistory();
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [item, setItem] = React.useState<IBranch | undefined>(undefined);
+  const { loading, error, data } = useQuery<QueryResponse>(GET_BRANCHES);
 
-            return (
-              <EnhancedTable
-                title="Branches"
-                keyField="id"
-                order={OrderType.asc}
-                orderBy={"name"}
-                columns={[
-                  { label: "Name", field: "name", disablePadding: false },
-                  { label: "Bank", field: "bank.name", disablePadding: false },
-                  {
-                    label: "Updated",
-                    field: "updated",
-                    disablePadding: false,
-                    format: formatCellDateTime,
-                  },
-                  {
-                    label: "Created",
-                    field: "created",
-                    disablePadding: false,
-                    format: formatCellDateTime,
-                  },
-                  {
-                    label: "Actions",
-                    field: "actions",
-                    disablePadding: true,
-                    action: true,
-                    actions: [
-                      {
-                        label: "Edit",
-                        actionIcon: <EditIcon />,
-                        onClick: (item) =>
-                          this.props.history.push(
-                            RoutePaths.BranchUpdate.replace(":id", item.id)
-                          ),
-                      },
-                      {
-                        label: "Delete",
-                        actionIcon: <DeleteIcon />,
-                        onClick: this.confirmDelete,
-                      },
-                    ],
-                  },
-                ]}
-                isLoading={loading}
-                data={data.getBranches}
-              />
-            );
-          }}
-        </Query>
-      </>
-    );
-  }
-}
+  const handleDialogClose = () => setOpenDialog(false);
+  const confirmDelete = (item: IBranch) => {
+    setItem(item);
+    setOpenDialog(true);
+  };
+  const handleCreateRedirect = () => {
+    history.push(RoutePaths.BranchCreate);
+  };
+
+  if (loading || !data) return <Spinner />;
+  if (error) return <Error error={error} />;
+
+  return (
+    <>
+      <BranchDelete
+        openDialog={openDialog}
+        item={item}
+        closeDialog={handleDialogClose}
+      />
+      <Button onClick={handleCreateRedirect}>Create</Button>
+      <EnhancedTable
+        title="Branches"
+        keyField="id"
+        order={OrderType.asc}
+        orderBy={"name"}
+        columns={[
+          { label: "Name", field: "name", disablePadding: false },
+          { label: "Bank", field: "bank.name", disablePadding: false },
+          {
+            label: "Updated",
+            field: "updated",
+            disablePadding: false,
+            format: formatCellDateTime,
+          },
+          {
+            label: "Created",
+            field: "created",
+            disablePadding: false,
+            format: formatCellDateTime,
+          },
+          {
+            label: "Actions",
+            field: "actions",
+            disablePadding: true,
+            action: true,
+            actions: [
+              {
+                label: "Edit",
+                actionIcon: <EditIcon />,
+                onClick: (item) =>
+                  history.push(RoutePaths.BranchUpdate.replace(":id", item.id)),
+              },
+              {
+                label: "Delete",
+                actionIcon: <DeleteIcon />,
+                onClick: confirmDelete,
+              },
+            ],
+          },
+        ]}
+        isLoading={loading}
+        data={data.getBranches}
+      />
+    </>
+  );
+};
 
 export default BranchList;

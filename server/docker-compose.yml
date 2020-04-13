@@ -1,0 +1,17 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:5.7
+    ports:
+      - 3306:3306
+    volumes:
+      - "./.volumes/mysql-prod:/var/lib/mysql"
+  app:
+    build: .
+    image: app
+    environment:
+      - NODE_ENV=prod
+    ports:
+      - 80:3003
+    depends_on:
+      - mysql

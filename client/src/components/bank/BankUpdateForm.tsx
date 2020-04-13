@@ -1,57 +1,56 @@
 import * as React from "react";
-import { Mutation, Query, QueryResult } from "react-apollo";
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import { useQuery, useMutation } from "react-apollo";
+import { useParams, useHistory } from "react-router-dom";
 import Spinner from "@material-ui/core/CircularProgress";
 import Error from "../Error";
 import { BANK } from "./queries/bank";
 import { UPDATE_BANK } from "./mutations/updateBank";
 import { RoutePaths } from "../layout/constants";
 import FormWrapper from "./form/FormWrapper";
+import { GET_BANKS } from "./queries/getBanks";
+import { IBank } from "./models";
 
 interface RouteParams {
   id: string | undefined;
 }
 
-class BankUpdateForm extends React.Component<RouteComponentProps<RouteParams>> {
-  render() {
-    const id = this.props.match.params.id
-      ? parseInt(this.props.match.params.id)
-      : undefined;
-    return (
-      <Query query={BANK} variables={{ id }}>
-        {({ data, error, loading }: QueryResult<any>) => {
-          if (error) {
-            return <Error error={error} />;
-          }
-
-          if (loading || !data) {
-            return <Spinner />;
-          }
-          const bank = data.bank;
-          return (
-            <Mutation
-              mutation={UPDATE_BANK}
-              onCompleted={(result: any) => {
-                this.props.history.push(RoutePaths.Banks);
-              }}
-              refetchQueries={["getBanks"]}
-            >
-              {(updateBank: any) => (
-                <FormWrapper
-                  initialValues={{
-                    id: bank.id,
-                    name: bank.name,
-                    notes: bank.notes,
-                  }}
-                  mutation={updateBank}
-                />
-              )}
-            </Mutation>
-          );
-        }}
-      </Query>
-    );
-  }
+interface QueryResponse {
+  bank: IBank;
 }
 
-export default withRouter(BankUpdateForm);
+interface MutationResponse {
+    updateBank: IBank;
+}
+
+const BankUpdateForm: React.FC = () => {
+  const history = useHistory();
+  const { id } = useParams<RouteParams>();
+  const { loading, error, data } = useQuery<QueryResponse>(BANK, {
+    variables: { id },
+  });
+  const [mutation] = useMutation<MutationResponse>(UPDATE_BANK, {
+    onCompleted: (result: MutationResponse) => {
+      history.push(RoutePaths.Banks);
+    },
+    refetchQueries: [{ query: GET_BANKS }],
+    awaitRefetchQueries: true,
+  });
+
+  if (loading || !data) return <Spinner />;
+  if (error) return <Error error={error} />;
+
+  const bank = data.bank;
+
+  return (
+    <FormWrapper
+      initialValues={{
+        id: bank.id,
+        name: bank.name,
+        notes: bank.notes,
+      }}
+      mutation={mutation}
+    />
+  );
+};
+
+export default BankUpdateForm;

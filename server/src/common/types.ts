@@ -1,5 +1,5 @@
 export enum OrderType {
-    asc = 'ask',
+    asc = 'asc',
     desc = 'desc',
 }
 

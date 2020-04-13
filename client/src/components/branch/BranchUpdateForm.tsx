@@ -1,54 +1,46 @@
 import * as React from "react";
-import { Mutation, Query, QueryResult } from "react-apollo";
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import { useQuery, useMutation } from "react-apollo";
+import { useParams, useHistory } from "react-router-dom";
 import Spinner from "@material-ui/core/CircularProgress";
 import Error from "../Error";
 import { BRANCH } from "./queries/branch";
 import { UPDATE_BRANCH } from "./mutations/updateBranch";
 import { RoutePaths } from "../layout/constants";
 import FormWrapper from "./form/FormWrapper";
+import { GET_BRANCHES } from "./queries/getBranches";
+import { IBranch } from "./models";
 
 interface RouteParams {
   id: string | undefined;
 }
 
-class BranchUpdateForm extends React.Component<
-  RouteComponentProps<RouteParams>
-> {
-  render() {
-    const id = this.props.match.params.id
-      ? parseInt(this.props.match.params.id)
-      : undefined;
-    return (
-      <Query query={BRANCH} variables={{ id }}>
-        {({ data, error, loading }: QueryResult<any>) => {
-          if (error) {
-            return <Error error={error} />;
-          }
-          if (loading || !data) {
-            return <Spinner />;
-          }
-          const { created, updated, bank, ...branchData } = data.branch;
-          return (
-            <Mutation
-              mutation={UPDATE_BRANCH}
-              onCompleted={(result) => {
-                this.props.history.push(RoutePaths.Branches);
-              }}
-              refetchQueries={["getBranches", "getBankBranches"]}
-            >
-              {(updateBranch) => (
-                <FormWrapper
-                  initialValues={branchData}
-                  mutation={updateBranch}
-                />
-              )}
-            </Mutation>
-          );
-        }}
-      </Query>
-    );
-  }
+interface QueryResponse {
+  branch: IBranch;
 }
 
-export default withRouter(BranchUpdateForm);
+interface MutationResponse {
+  updateBranch: IBranch;
+}
+
+const BranchUpdateForm: React.FC = () => {
+  const history = useHistory();
+  const { id } = useParams<RouteParams>();
+  const { loading, error, data } = useQuery<QueryResponse>(BRANCH, {
+    variables: { id },
+  });
+  const [mutation] = useMutation<MutationResponse>(UPDATE_BRANCH, {
+    onCompleted: (result: MutationResponse) => {
+      history.push(RoutePaths.Branches);
+    },
+    refetchQueries: [{ query: GET_BRANCHES }],
+    awaitRefetchQueries: true,
+  });
+
+  if (loading || !data) return <Spinner />;
+  if (error) return <Error error={error} />;
+
+  const { created, updated, bank, ...branchData } = data.branch;
+  return <FormWrapper initialValues={branchData} mutation={mutation} />;
+};
+
+export default BranchUpdateForm;

@@ -2,7 +2,7 @@ import Snackbar from '@material-ui/core/Snackbar'
 import {ApolloError} from 'apollo-client'
 import * as React from 'react'
 
-const Error: React.SFC<{error: ApolloError}> = ({error: { message}}) => (
+const Error: React.FC<{error: ApolloError}> = ({error: { message}}) => (
     <Snackbar  
         autoHideDuration={5000}
         ContentProps={{

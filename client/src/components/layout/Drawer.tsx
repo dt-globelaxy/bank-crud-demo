@@ -22,7 +22,7 @@ interface IDrawerProps extends WithStyles<typeof styles> {
     className?: string
 }
 
-const DrawerComponent: React.SFC<IDrawerProps & RouteComponentProps> = ({className, classes, location: { pathname }}) => (
+const DrawerComponent: React.FC<IDrawerProps & RouteComponentProps> = ({className, classes, location: { pathname }}) => (
     <Drawer
         className={className}
         variant="permanent"

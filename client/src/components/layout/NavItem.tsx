@@ -11,7 +11,7 @@ interface INavItemProps {
     icon: React.ReactElement<any>;
 }
 
-const NavItem: React.SFC<INavItemProps> = (props: INavItemProps) => {
+const NavItem: React.FC<INavItemProps> = (props: INavItemProps) => {
     const { label, path, pathname, icon } = props;
     const isSeleted = path.toLowerCase() === pathname.toLowerCase();
     return (

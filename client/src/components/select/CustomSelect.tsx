@@ -6,7 +6,6 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import customSelectStyle from './customSelectStyle';
 
 import Select from 'react-select';
-// import { Props as SelectProps } from 'react-select';
 import components from './components';
 
 interface CustomSelectProps extends WithStyles<typeof customSelectStyle> {

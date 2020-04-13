@@ -10,15 +10,16 @@ interface IFormWrapperProps {
   mutation: MutationFunction<any, OperationVariables>;
 }
 
-const FormWrapper: React.SFC<IFormWrapperProps> = ({
+const FormWrapper: React.FC<IFormWrapperProps> = ({
   initialValues,
   mutation,
 }) => (
   <Form
-    onSubmit={async (values: any) => {
-      values.number = parseInt(values.number);
+    onSubmit={async (values: IAccountFormModel) => {
       try {
-        return mutation({ variables: values });
+        return mutation({
+          variables: { ...values, employeeNumber: values.employeeNumber.toString() },
+        });
       } catch (error) {
         return (
           error.graphQLErrors &&

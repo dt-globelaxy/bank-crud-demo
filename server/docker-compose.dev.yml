@@ -1,0 +1,13 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: 'bank-crud-demo-db'
+      MYSQL_USER: 'bank-crud-demo-account'
+      MYSQL_PASSWORD: 'bank-crud-demo-password'
+      MYSQL_ROOT_PASSWORD: 'bank-crud-demo-password'
+    ports:
+      - 3306:3306
+    volumes:
+      - "./.volumes/mysql-dev:/var/lib/mysql"

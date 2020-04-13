@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Query, QueryResult, OperationVariables } from "react-apollo";
+import { useQuery } from "react-apollo";
+import { useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import Spinner from "@material-ui/core/CircularProgress";
 import Error from "../Error";
@@ -12,115 +13,99 @@ import { RoutePaths } from "../layout/constants";
 import AccountDelete from "./AccountDelete";
 import AccountListFilters from "./AccountListFilters";
 
-interface IState {
-  perPage: number;
-  page: number;
-  order: OrderType;
-  orderBy: string;
-  openDialog: boolean;
-  item: IAccount | undefined;
-  fromNumber: number | undefined;
-  toNumber: number | undefined;
+interface QueryResponse {
+  getAccounts: {
+    data: IAccount[];
+    count: number;
+  };
 }
+const AccountsList: React.FC = () => {
+  const history = useHistory();
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [item, setItem] = React.useState<IAccount | undefined>(undefined);
+  const [page, setPage] = React.useState(0);
+  const [perPage, setPerPage] = React.useState(5);
+  const [order, setOrder] = React.useState<OrderType>(OrderType.asc);
+  const [orderBy, setOrderBy] = React.useState("holdersName");
+  const [fromNumber, setFromNumber] = React.useState<number | undefined>(
+    undefined
+  );
+  const [toNumber, setToNumber] = React.useState<number | undefined>(undefined);
 
-class AccountsList extends React.Component<any, IState> {
-  state: IState = {
-    page: 0,
-    perPage: 5,
-    order: OrderType.asc,
-    orderBy: "holdersName",
-    openDialog: false,
-    item: undefined,
-    fromNumber: undefined,
-    toNumber: undefined,
+  const { loading, error, data } = useQuery<QueryResponse>(GET_ACCOUNTS, {
+    variables: { page, perPage, order, orderBy, fromNumber, toNumber },
+  });
+
+  const handleDialogClose = () => setOpenDialog(false);
+  const confirmDelete = (item: IAccount) => {
+    setItem(item);
+    setOpenDialog(true);
+  };
+  const handleCreateRedirect = () => {
+    history.push(RoutePaths.AccountCreate);
   };
 
-  handleOnOrderByChange = (newOrderBy: string) => {
-    this.setState({ orderBy: newOrderBy });
+  const handleOnOrderByChange = (newOrderBy: string) => {
+    setOrderBy(newOrderBy);
   };
 
-  handleOnOrderChange = (newOrder: OrderType) => {
-    this.setState({ order: newOrder });
+  const handleOnOrderChange = (newOrder: OrderType) => {
+    setOrder(newOrder);
   };
 
-  handleOnPerPageChange = (newPerPage: number) => {
-    this.setState({ perPage: newPerPage });
+  const handleOnPerPageChange = (newPerPage: number) => {
+    setPerPage(newPerPage);
   };
 
-  handleOnPageChange = (newPage: number) => {
-    this.setState({ page: newPage });
+  const handleOnPageChange = (newPage: number) => {
+    setPage(newPage);
   };
 
-  handleDialogClose = () => this.setState({ openDialog: false });
-  confirmDelete = (item: IAccount) => this.setState({ item, openDialog: true });
-  handleCreateRedirect = () => {
-    this.props.history.push(RoutePaths.AccountCreate);
-  };
-
-  handleOnEditItemClick = (item: IAccount) =>
-    this.props.history.push(
-      RoutePaths.AccountUpdate.replace(":id", item.id.toString())
-    );
-  handleFilderChange = (
+  const handleOnEditItemClick = (item: IAccount) =>
+    history.push(RoutePaths.AccountUpdate.replace(":id", item.id.toString()));
+  const handleFilderChange = (
     fromNumber: number | undefined,
     toNumber: number | undefined
   ) => {
-    this.setState({ fromNumber: fromNumber, toNumber: toNumber });
+    setFromNumber(fromNumber);
+    setToNumber(toNumber);
   };
-  render() {
-    const { page, perPage, order, orderBy, fromNumber, toNumber } = this.state;
-    return (
-      <>
-        <AccountDelete
-          openDialog={this.state.openDialog}
-          item={this.state.item}
-          closeDialog={this.handleDialogClose}
-        />
-        <Button onClick={this.handleCreateRedirect}>Create</Button>
-        <AccountListFilters
-          fromNumber={fromNumber}
-          toNumber={toNumber}
-          onFilterChange={this.handleFilderChange}
-        />
-        <Query
-          query={GET_ACCOUNTS}
-          variables={{ page, perPage, order, orderBy, fromNumber, toNumber }}
-        >
-          {({ data, error, loading }: QueryResult<any, OperationVariables>) => {
-            if (error) {
-              return <Error error={error} />;
-            }
-            if (loading || !data) {
-              return <Spinner />;
-            }
 
-            return (
-              <EnhancedTable
-                title="Accounts"
-                keyField="id"
-                order={order}
-                orderBy={orderBy}
-                columns={accountListColumns(
-                  this.handleOnEditItemClick,
-                  this.confirmDelete
-                )}
-                isLoading={loading}
-                data={data.getAccounts.data}
-                count={data.getAccounts.count}
-                perPage={perPage}
-                page={page}
-                remotePaging={true}
-                onOrderByChange={this.handleOnOrderByChange}
-                onOrderChange={this.handleOnOrderChange}
-                onPerPageChange={this.handleOnPerPageChange}
-                onPageChange={this.handleOnPageChange}
-              />
-            );
-          }}
-        </Query>
-      </>
-    );
-  }
-}
+  if (loading || !data) return <Spinner />;
+  if (error) return <Error error={error} />;
+
+  return (
+    <>
+      <AccountDelete
+        openDialog={openDialog}
+        item={item}
+        closeDialog={handleDialogClose}
+      />
+      <Button onClick={handleCreateRedirect}>Create</Button>
+      <AccountListFilters
+        fromNumber={fromNumber}
+        toNumber={toNumber}
+        onFilterChange={handleFilderChange}
+      />
+      <EnhancedTable
+        title="Accounts"
+        keyField="id"
+        order={order}
+        orderBy={orderBy}
+        columns={accountListColumns(handleOnEditItemClick, confirmDelete)}
+        isLoading={loading}
+        data={data.getAccounts.data}
+        count={data.getAccounts.count}
+        perPage={perPage}
+        page={page}
+        remotePaging={true}
+        onOrderByChange={handleOnOrderByChange}
+        onOrderChange={handleOnOrderChange}
+        onPerPageChange={handleOnPerPageChange}
+        onPageChange={handleOnPageChange}
+      />
+    </>
+  );
+};
 
 export default AccountsList;

@@ -33,7 +33,7 @@ const styles = (theme : Theme) => createStyles({
 
 interface IAppProps extends WithStyles < typeof styles > {}
 
-const App : React.SFC < IAppProps > = (props) => {
+const App : React.FC < IAppProps > = (props) => {
   const {classes} = props
 
   return (

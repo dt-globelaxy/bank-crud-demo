@@ -1,60 +1,52 @@
 import * as React from "react";
-import { Mutation, Query, QueryResult } from "react-apollo";
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import { useQuery, useMutation } from "react-apollo";
+import { useParams, useHistory } from "react-router-dom";
 import Spinner from "@material-ui/core/CircularProgress";
 import Error from "../Error";
 import { ACCOUNT } from "./queries/account";
 import { UPDATE_ACCOUNT } from "./mutations/updateAccount";
 import { RoutePaths } from "../layout/constants";
 import FormWrapper from "./wizard/FormWrapper";
+import { GET_ACCOUNTS, GET_ACCOUNTS_DEFAULTS } from "./queries/getAccounts";
+import { IAccount } from "./models";
 
 interface RouteParams {
   id: string | undefined;
 }
 
-class AccountUpdateForm extends React.Component<
-  RouteComponentProps<RouteParams>
-> {
-  render() {
-    const id = this.props.match.params.id
-      ? parseInt(this.props.match.params.id)
-      : undefined;
-    return (
-      <Query query={ACCOUNT} variables={{ id }}>
-        {({ data, error, loading }: QueryResult<any>) => {
-          if (error) {
-            return <Error error={error} />;
-          }
-          if (loading || !data) {
-            return <Spinner />;
-          }
-          const {
-            created,
-            updated,
-            branch,
-            bank,
-            ...accountData
-          } = data.account;
-          return (
-            <Mutation
-              mutation={UPDATE_ACCOUNT}
-              onCompleted={(result: any) => {
-                this.props.history.push(RoutePaths.Accounts);
-              }}
-              refetchQueries={["getAccounts", "account"]}
-            >
-              {(updateAccount: any) => (
-                <FormWrapper
-                  initialValues={accountData}
-                  mutation={updateAccount}
-                />
-              )}
-            </Mutation>
-          );
-        }}
-      </Query>
-    );
-  }
+interface QueryResponse {
+  account: IAccount;
 }
 
-export default withRouter(AccountUpdateForm);
+interface MutationResponse {
+  updateAccount: IAccount;
+}
+
+const AccountUpdateForm: React.FC = () => {
+  const history = useHistory();
+  const { id } = useParams<RouteParams>();
+  const { loading, error, data } = useQuery<QueryResponse>(ACCOUNT, {
+    variables: { id },
+  });
+  const [mutation] = useMutation<MutationResponse>(UPDATE_ACCOUNT, {
+    onCompleted: (result: MutationResponse) => {
+      history.push(RoutePaths.Accounts);
+    },
+    refetchQueries: [
+      {
+        query: GET_ACCOUNTS,
+        variables: GET_ACCOUNTS_DEFAULTS,
+      },
+    ],
+    awaitRefetchQueries: true,
+  });
+
+  if (loading || !data) return <Spinner />;
+  if (error) return <Error error={error} />;
+
+  const { created, updated, ...accountData } = data.account;
+
+  return <FormWrapper initialValues={accountData} mutation={mutation} />;
+};
+
+export default AccountUpdateForm;

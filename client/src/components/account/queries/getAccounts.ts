@@ -1,4 +1,12 @@
 import gql from 'graphql-tag'
+import { OrderType } from '../../table/constants';
+
+export const GET_ACCOUNTS_DEFAULTS = {
+  page: 0,
+  perPage: 5,
+  order: OrderType.asc,
+  orderBy: "holdersName",
+};
 
 export const GET_ACCOUNTS = gql`
   query getAccounts($page: Int, $perPage: Int, $order: OrderType, $orderBy: String, $fromNumber: Int, $toNumber: Int) { 

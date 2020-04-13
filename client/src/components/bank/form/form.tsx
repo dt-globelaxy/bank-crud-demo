@@ -6,7 +6,9 @@ import Paper from "@material-ui/core/Paper/Paper";
 import { Button } from "@material-ui/core";
 import { IBankFormModel } from "./models";
 
-export const bankFormRender = (props: FormRenderProps<IBankFormModel>) => (
+export const bankFormRender: React.FC<FormRenderProps<IBankFormModel>> = (
+  props: FormRenderProps<IBankFormModel>
+) => (
   <form onSubmit={props.handleSubmit}>
     <Paper style={{ padding: 16 }}>
       <Grid>

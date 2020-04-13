@@ -39,7 +39,7 @@ export const AccountPage = () => (
                 fullWidth
                 parse={normalizeAccountNumber}
                 formatOnBlur
-                format={value => padStart(value,7, '0')}
+                format={value => parseInt(padStart(value,7, '0'))}
                 name="number"
                 component={TextField}
                 label="Account Number"

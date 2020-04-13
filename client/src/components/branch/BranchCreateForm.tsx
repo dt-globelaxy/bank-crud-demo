@@ -1,23 +1,40 @@
-import * as React from 'react';
-import { Mutation } from 'react-apollo';
-import { CREATE_BRANCH } from './mutations/createBranch';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { RoutePaths } from '../layout/constants';
-import FormWrapper from './form/FormWrapper';
+import * as React from "react";
+import Spinner from "@material-ui/core/CircularProgress";
+import Error from "../Error";
+import { useHistory } from "react-router-dom";
+import { useMutation } from "@apollo/react-hooks";
+import { CREATE_BRANCH } from "./mutations/createBranch";
+import { RoutePaths } from "../layout/constants";
+import FormWrapper from "./form/FormWrapper";
+import { GET_BRANCHES } from "./queries/getBranches";
+import { IBranch } from "./models";
 
-class BranchCreateForm extends React.Component<RouteComponentProps> {
-    
-    render() {
-        return (
-            <Mutation
-                mutation={CREATE_BRANCH}
-                onCompleted={result => {this.props.history.push(RoutePaths.Branches) }}
-                refetchQueries={['getBranches', 'getBankBranches']}
-                >
-                {(createBranch) => (<FormWrapper initialValues={{ bankId: 0, name: '', address: ''}} mutation={createBranch}  />)}
-            </Mutation>
-        )
-    }
+interface MutationResponse {
+  craeteBranch: IBranch;
 }
 
-export default withRouter(BranchCreateForm)
+const BranchCreateForm: React.FC = () => {
+  const history = useHistory();
+  const [mutate, { loading, error }] = useMutation<MutationResponse>(
+    CREATE_BRANCH,
+    {
+      onCompleted: (result: MutationResponse) => {
+        history.push(RoutePaths.Branches);
+      },
+      awaitRefetchQueries: true,
+      refetchQueries: [{ query: GET_BRANCHES }],
+    }
+  );
+
+  if (loading) return <Spinner />;
+  if (error) return <Error error={error} />;
+
+  return (
+    <FormWrapper
+      initialValues={{ bankId: 0, name: "", address: "" }}
+      mutation={mutate}
+    />
+  );
+};
+
+export default BranchCreateForm;

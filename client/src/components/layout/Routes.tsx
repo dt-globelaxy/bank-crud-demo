@@ -11,7 +11,7 @@ import BranchCreateForm from '../branch/BranchCreateForm';
 import AccountUpdateForm from '../account/AccountUpdateForm';
 import AccountCreateForm from '../account/AccountCreateForm';
 
-const Routes: React.SFC = () => (
+const Routes: React.FC = () => (
     <Switch>
         <Route exact path="/" component={AccountsList} />
         <Route exact path={RoutePaths.Accounts} component={AccountsList} />

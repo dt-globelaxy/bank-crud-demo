@@ -11,7 +11,7 @@ interface IFormWrapperProps {
     mutation: MutationFunction<any, OperationVariables>;
 }
 
-const FormWrapper: React.SFC<IFormWrapperProps> = ({initialValues, mutation }) => ( 
+const FormWrapper: React.FC<IFormWrapperProps> = ({initialValues, mutation }) => ( 
     <Form 
         onSubmit={(values) => mutation({ variables: values }).catch(({ graphQLErrors }) => {
             return graphQLErrors && graphQLErrors.length && graphQLErrors[0].extensions.exception.fields;
