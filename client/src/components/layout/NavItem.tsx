@@ -13,7 +13,7 @@ interface INavItemProps {
 
 const NavItem: React.SFC<INavItemProps> = (props: INavItemProps) => {
     const { label, path, pathname, icon } = props;
-    const isSeleted = path.toLowerCase() == pathname.toLowerCase();
+    const isSeleted = path.toLowerCase() === pathname.toLowerCase();
     return (
         <ListItem selected={isSeleted} button component={({innerRef,...props}) => <Link {...props} to={path} />}>
             <ListItemIcon>

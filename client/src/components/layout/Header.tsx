@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { FormattedMessage, FormattedDate } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import AppBar from '@material-ui/core/AppBar'
 import {createStyles, Theme, withStyles, WithStyles} from '@material-ui/core/styles'
 import Toolbar from '@material-ui/core/Toolbar'

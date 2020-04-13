@@ -16,7 +16,7 @@ import { OrderType } from './constants';
 import EnhancedTableHead from './EnhancedTableHead';
 
 import TableRow from '@material-ui/core/TableRow';
-import TableCell, { TableCellProps } from '@material-ui/core/TableCell';
+import TableCell from '@material-ui/core/TableCell';
 import Checkbox from '@material-ui/core/Checkbox';
 import EnhancedTableToolbar from './EnhancedTableToolbar';
 import { TableColumn } from './models';

@@ -2,13 +2,13 @@ import * as React from 'react';
 import { Form } from 'react-final-form';
 import { IAccountFormModel } from './models';
 import Button from '@material-ui/core/Button/Button';
-import { MutationFn, OperationVariables } from 'react-apollo';
+import { MutationFunction, OperationVariables } from 'react-apollo';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 
 interface IWizardFormProps {
-    mutation: MutationFn<any, OperationVariables>;
+    mutation: MutationFunction<any, OperationVariables>;
     initialValues?: IAccountFormModel | undefined;
     children: React.ReactNode;
 }
@@ -51,10 +51,8 @@ export default class Wizard extends React.Component<IWizardFormProps, IWizardFor
         const isLastPage = page === lastPageIndex
         if (isLastPage) {
           values.number = parseInt(values.number);
-          console.log('===========================>', values);
           return  this.props.mutation({ variables: values }).catch((error) => {
             throw error
-            return error.graphQLErrors && error.graphQLErrors.length && error.graphQLErrors[0].extensions.exception.fields;
           }); 
         } else {
           this.next(values)

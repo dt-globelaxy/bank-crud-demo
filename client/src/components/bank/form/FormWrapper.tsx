@@ -3,13 +3,12 @@ import { bankFormValidation } from "./validation";
 import { bankFormRender } from "./form";
 import { Form } from "react-final-form";
 import { IBankFormModel } from "./models";
-import { MutationFn } from "react-apollo/Mutation";
-import { OperationVariables } from "react-apollo/types";
+import { MutationFunction, OperationVariables } from "react-apollo";
 
 
 interface IFormWrapperProps {
     initialValues: IBankFormModel;
-    mutation: MutationFn<any, OperationVariables>;
+    mutation: MutationFunction<any, OperationVariables>;
 }
 
 const FormWrapper: React.SFC<IFormWrapperProps> = ({initialValues, mutation }) => ( 

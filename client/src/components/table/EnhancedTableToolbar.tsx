@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import {WithStyles, withStyles} from "@material-ui/core";
 import classNames from 'classnames';
 import enhancedTableToolbarStyle from './enhancedTableToolbarStyle';

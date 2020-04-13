@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Control from './Control';
 import Menu from './Menu';
 import NoOptionsMessage from './NoOptionsMessage';

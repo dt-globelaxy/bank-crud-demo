@@ -6,9 +6,10 @@ import { Button } from '@material-ui/core';
 import { BankPage } from './pages/BankPage';
 import { AccountPage } from './pages/AccountPage';
 import { EmployeePage } from './pages/EmployeePage';
+import { IAccountFormModel } from './models';
 
 
-export const updateFormRender = (props: FormRenderProps) => ( 
+export const updateFormRender = (props: FormRenderProps<IAccountFormModel>) => ( 
     <form onSubmit={props.handleSubmit}>
         <Paper style={{ padding: 16 }}>
             <BankPage />

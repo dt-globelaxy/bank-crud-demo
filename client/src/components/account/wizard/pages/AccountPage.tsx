@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Field } from 'react-final-form';
 import { TextField } from 'final-form-material-ui';
 import Grid from '@material-ui/core/Grid/Grid';
-import { normalizeAccountNumber, accountTypeOptions, pad } from '../utils';
+import { normalizeAccountNumber, accountTypeOptions } from '../utils';
 import { find, padStart } from 'lodash';
 import CustomSelect from '../../../select/CustomSelect';
 

@@ -40,12 +40,12 @@ class EnhancedTableHead extends React.Component<EnhancedTableHeadProps> {
                     {columns.map(column => (
                         <TableCell
                             key={column.field}
-                            align={column.numeric ? 'right' : 'left'}
+                            align={column.align}
                             padding={column.disablePadding  ? 'none' : 'default'}
                             sortDirection={orderBy === column.field ? order : false}>
                             <Tooltip
                                 title="Sort"
-                                placement={column.numeric ? 'bottom-end' : 'bottom-start'}
+                                placement={column.align === 'right'  ? 'bottom-end' : 'bottom-start'}
                                 enterDelay={300}>
                                 <TableSortLabel
                                     active={orderBy === column.field}

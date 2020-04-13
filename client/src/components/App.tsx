@@ -24,7 +24,7 @@ const styles = (theme : Theme) => createStyles({
     backgroundColor: theme.palette.background.default,
     gridArea: 'content',
     justifyContent: 'center',
-    padding: theme.spacing.unit * 3
+    padding: theme.spacing(3)
   },
   drawer: {
     gridArea: 'drawer'

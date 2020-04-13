@@ -32,7 +32,7 @@ class AccountListFilters extends React.Component<IAccountListFiltersProps> {
             {({handleSubmit}) => (
             <form onSubmit={handleSubmit}>
                 <Paper style={{padding: 16}}>
-                    <Grid container spacing={16} alignContent='center'>
+                    <Grid container spacing={10} alignContent='center'>
                         <Grid key={0} item xs={4}>
                             <Field
                                 fullWidth

@@ -37,7 +37,7 @@ const customSelectStyles = (theme : Theme) => {
         opacity: 1
     },
     chip: {
-        margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
+        margin: `${theme.spacing(0.5)}px ${theme.spacing(0.25)}px`,
     },
     chipFocused: {
         backgroundColor: emphasize(
@@ -46,7 +46,7 @@ const customSelectStyles = (theme : Theme) => {
         ),
     },
     noOptionsMessage: {
-        padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
+        padding: `${theme.spacing()}px ${theme.spacing(2)}px`,
     },
     singleValue: {
         //color: "#495057",
@@ -69,12 +69,12 @@ const customSelectStyles = (theme : Theme) => {
     paper: {
         position: 'absolute',
         zIndex: 1,
-        marginTop: theme.spacing.unit,
+        marginTop: theme.spacing(),
         left: 0,
         right: 0,
     },
     divider: {
-        height: theme.spacing.unit * 2,
+        height: theme.spacing(2),
     },
     formControl: {
         margin: "0 0 0 0",

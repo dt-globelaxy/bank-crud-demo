@@ -3,13 +3,12 @@ import { branchFormValidation } from "./validation";
 import { branchFormRender } from "./form";
 import { Form } from "react-final-form";
 import { IBranchFormModel } from "./models";
-import { MutationFn } from "react-apollo/Mutation";
-import { OperationVariables } from "react-apollo/types";
+import { MutationFunction, OperationVariables } from "react-apollo";
 
 
 interface IFormWrapperProps {
     initialValues: IBranchFormModel;
-    mutation: MutationFn<any, OperationVariables>;
+    mutation: MutationFunction<any, OperationVariables>;
 }
 
 const FormWrapper: React.SFC<IFormWrapperProps> = ({initialValues, mutation }) => ( 

@@ -16,10 +16,7 @@ const customTheme = createMuiTheme({
           dark: '#12836d',
           contrastText: '#000',
         },
-    },
-    typography: {
-        useNextVariants: true,
-    },
+    }
 })
 
 export default customTheme

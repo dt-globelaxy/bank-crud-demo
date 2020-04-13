@@ -3,7 +3,7 @@ import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 const enhancedTableToolbarStyle = (theme : Theme) => createStyles({
     root: {
-        paddingRight: theme.spacing.unit
+        paddingRight: theme.spacing()
     },
     highlight: theme.palette.type === 'light'
         ? {
